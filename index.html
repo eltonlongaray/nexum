@@ -126,15 +126,17 @@ p{margin:0}
 .phone .ph span{font-size:.75rem;line-height:1rem;color:#7F93AD}
 .phone .ph .vivo{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:.75rem;line-height:1rem;color:#7FD6A4}
 .phone .ph .vivo::before{content:"";width:8px;height:8px;border-radius:9999px;background:#7FD6A4}
-.msgs{display:flex;flex-direction:column;gap:8px;padding:4px;min-height:340px}
-.msg{max-width:84%;padding:8px 12px;border-radius:16px;font-size:.875rem;line-height:1.25rem;color:#E6EEF8;opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
-.msg.on{opacity:1;transform:none}
+/* Como no WhatsApp: a mensagem nova nasce embaixo e empurra as anteriores para cima */
+.msgs{display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:4px;height:340px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 32px);mask-image:linear-gradient(to bottom,transparent 0,#000 32px)}
+.msg{flex:none;max-width:84%;padding:8px 12px;border-radius:16px;font-size:.875rem;line-height:1.25rem;color:#E6EEF8;display:none}
+.msg.on{display:block;animation:sobe .35s var(--ease) both}
+@keyframes sobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .msg.me{align-self:flex-end;background:#2F6FB3;color:#FFFFFF;border-bottom-right-radius:4px}
 .msg.ai{align-self:flex-start;background:#17293F;border-bottom-left-radius:4px}
 .msg .hint{display:block;margin-top:4px;font-size:.75rem;line-height:1rem;color:#9FB6D2}
 .msg.tag-ok{align-self:center;background:rgba(127,214,164,.1);color:#7FD6A4;border:1px solid rgba(127,214,164,.35);font-weight:700;font-size:.75rem;line-height:1rem;border-radius:9999px}
 .photo{height:72px;border-radius:12px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.14) 0 8px,transparent 8px 16px);display:grid;place-items:center;font-size:.75rem;line-height:1rem;color:#DDE8F5;margin-bottom:8px}
-@media (prefers-reduced-motion:reduce){.msg{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.msg.on{animation:none}}
 .ia-modes{display:flex;gap:8px;flex-wrap:wrap}
 .facts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
 .facts li{display:flex;gap:12px}
