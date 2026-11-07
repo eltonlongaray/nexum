@@ -367,7 +367,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       document.getElementById('l-novo').innerHTML=a.v.map(function(x){return '<li>'+OK+'<span>'+x+'</span></li>'}).join('');
     }else{liberar();if(msgs)tocar()}
     prev.hidden=i===0;
-    next.innerHTML=ehIA?'Ir às perguntas ↓':'Próxima: '+nomeDe(i+1)+' →';
+    next.innerHTML=ehIA?'Próxima →':'Próxima: '+nomeDe(i+1)+' →';
     [].forEach.call(dots.children,function(d,j){d.className=j===i?'on':''});
     if(dir){slide.classList.remove('ent-d','ent-e');void slide.offsetWidth;slide.classList.add(dir>0?'ent-d':'ent-e')}
   }
