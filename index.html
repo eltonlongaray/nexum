@@ -125,24 +125,39 @@ p{margin:0}
 .sector:active{transform:scale(.98)}
 .sector[data-form="delce"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .sector[data-form="delce"] span{color:var(--accent-ink);opacity:.85}
-.sheet{position:fixed;inset:0;z-index:30;background:rgba(8,20,32,.45);display:flex;justify-content:flex-end}
-.sheet-in{width:min(560px,100%);height:100%;overflow-y:auto;background:var(--bg);padding:calc(32px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(48px + env(safe-area-inset-bottom,0px)) 24px;display:flex;flex-direction:column;gap:32px;transition:transform .5s var(--ease)}
-.sheet.enter .sheet-in{transform:translateX(48px)}
-.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.close{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:0 0 40px}
-.field{display:flex;flex-direction:column;gap:8px}
-.field label{font-weight:600}
-.field label .n{color:var(--accent);margin-right:8px}
-.field .help{font-size:.875rem;line-height:1.25rem;color:var(--muted)}
-.field input,.field textarea{font:1rem/1.5rem var(--font);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;width:100%}
-.field textarea{min-height:96px;resize:vertical}
-.field input:focus,.field textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
-.field input[aria-invalid="true"]{border-color:var(--bad)}
-.err{font-size:.875rem;line-height:1.25rem;color:var(--bad)}
-.actions{display:flex;flex-wrap:wrap;gap:12px}
+/* Formulário em tela cheia: uma pergunta por vez (mesmo modelo do diagnóstico da Altas Vendas) */
+.sheet{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;transition:opacity .3s var(--ease)}
+.sheet.enter{opacity:0}
+.f-top{background:#0E2138;color:#FFFFFF;padding-top:env(safe-area-inset-top,0px);position:sticky;top:0;z-index:1}
+.f-top .in{max-width:36rem;margin:0 auto;height:64px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.f-top .marca{display:flex;align-items:center;gap:12px;min-width:0}
+.f-top .marca .em{width:32px;height:32px;border-radius:8px;background:#FFFFFF;display:grid;place-items:center;flex:0 0 32px}
+.f-top .marca .em img{width:22px}
+.f-top .marca b{font-size:.875rem;line-height:1.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f-top .dir{display:flex;align-items:center;gap:12px}
+.f-cont{font-size:.75rem;line-height:1rem;font-weight:700;color:#A9C4E0;white-space:nowrap}
+.close{border:1px solid rgba(255,255,255,.2);background:transparent;color:#FFFFFF;border-radius:8px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:0 0 40px}
+.barra{height:4px;background:rgba(255,255,255,.12)}
+.barra i{display:block;height:100%;width:0;background:#6FB3D9;transition:transform .5s var(--ease);transform-origin:left;width:100%;transform:scaleX(0)}
+.f-body{flex:1;width:100%;max-width:36rem;margin:0 auto;padding:32px 16px calc(48px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
+.passo{display:flex;flex-direction:column;gap:16px;animation:entra .5s var(--ease) both}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.passo .qt{font-size:1.875rem;line-height:2.25rem;letter-spacing:-.01em;font-weight:700}
+.passo .help{font-size:.875rem;line-height:1.25rem;color:var(--muted)}
+.passo input,.passo textarea{font:1.125rem/1.75rem var(--font);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;width:100%}
+.passo textarea{min-height:160px;resize:vertical}
+.passo input:focus,.passo textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.err{font-size:.875rem;line-height:1.25rem;color:var(--bad);min-height:1.25rem}
+.f-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:8px}
+.f-nav .btn.pri{padding:12px 24px;border-radius:9999px}
+.voltar{background:none;border:none;color:var(--muted);font:600 1rem/1.5rem var(--font);cursor:pointer;padding:8px 0}
 .small{font-size:.875rem;line-height:1.25rem;color:var(--muted)}
-.done{display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:16px;background:var(--ok-soft);color:var(--fg)}
-.done b{font-size:1.25rem;line-height:1.75rem;color:var(--ok)}
+.done{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:16px;padding:32px 0}
+.done .selo{width:64px;height:64px;border-radius:9999px;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center}
+.done h2{font-size:1.875rem;line-height:2.25rem}
+.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+@media (max-width:560px){.passo .qt{font-size:1.5rem;line-height:2rem}}
+@media (prefers-reduced-motion:reduce){.passo{animation:none}.barra i{transition:none}}
 
 footer{padding-block:32px;border-top:1px solid var(--line);font-size:.875rem;line-height:1.25rem;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
@@ -248,32 +263,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 
 </main>
 
-<div class="sheet" id="sheet" hidden>
-  <div class="sheet-in" role="dialog" aria-modal="true" aria-labelledby="f-title">
-    <div class="sheet-head">
-      <div class="stack" style="gap:4px"><span class="eyebrow" id="f-eye">Formulário</span><h2 id="f-title" style="font-size:1.5rem;line-height:2rem">Perguntas</h2></div>
-      <button class="close" type="button" id="f-close" aria-label="Fechar formulário"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="f-title">
+  <div class="f-top">
+    <div class="in">
+      <span class="marca"><span class="em"><img src="img/emblema.png" alt=""></span><b id="f-title">Perguntas</b></span>
+      <span class="dir"><span class="f-cont" id="f-cont"></span>
+        <button class="close" type="button" id="f-close" aria-label="Fechar formulário"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
     </div>
-    <form id="f" novalidate class="stack-lg">
-      <div class="field">
-        <label for="f-nome">Seu nome</label>
-        <input id="f-nome" name="nome" type="text" autocomplete="name" maxlength="120">
-        <span class="err" id="e-nome" hidden>Escreva seu nome para sabermos de quem é a resposta.</span>
-      </div>
-      <div id="f-qs" class="stack-lg"></div>
-      <div class="stack">
-        <span class="err" id="e-vazio" hidden>Responda pelo menos uma pergunta antes de enviar.</span>
-        <span class="err" id="e-envio" hidden>Não foi possível enviar agora. Confira a internet e tente de novo. Suas respostas continuam aqui.</span>
-        <div class="actions"><button class="btn pri" type="submit" id="f-enviar">Enviar respostas</button></div>
-        <p class="small">O rascunho fica salvo neste aparelho até você enviar.</p>
-      </div>
-    </form>
-    <div class="done" id="f-done" hidden>
-      <b>Respostas enviadas. Obrigado!</b>
-      <p>Elas já chegaram para o Elton. Se alguém do mesmo setor também quiser responder, pode usar esta mesma página.</p>
-      <div class="actions"><button class="btn ghost" type="button" id="f-outra">Enviar outra resposta</button><button class="btn pri" type="button" id="f-fim">Fechar</button></div>
-    </div>
+    <div class="barra"><i id="f-barra"></i></div>
   </div>
+  <div class="f-body" id="f-body" aria-live="polite"></div>
 </div>
 
 <footer>
@@ -344,7 +343,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       ["A clínica emite nota fiscal pelo sistema? Quais tipos de nota? A clínica é Simples Nacional ou outro regime?"],
       ["O que a assistente com IA deveria fazer primeiro para ajudar o senhor?"]]},
     recepcao:{t:"Perguntas para a recepção",q:[
-      ["O que você mais faz no sistema durante o dia?"],
+      ["Quais tarefas você repete mais vezes por dia no sistema?","Por exemplo: agendar, cadastrar cliente, lançar venda, cobrar. São essas que vamos deixar mais rápidas primeiro."],
       ["Em que momento o cliente fica esperando por causa do sistema?"],
       ["O que você anota em papel ou no WhatsApp porque o sistema não resolve?"],
       ["Quando o cliente tem mais de um animal, como vocês fazem para cobrar?"],
@@ -367,54 +366,91 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       ["Como seria o relatório ideal para você? Quais informações e colunas ele precisa ter?","Se tiver um modelo, mande depois para o Elton, sem dados de clientes."],
       ["A Reforma Tributária muda alguma informação que você vai precisar receber da clínica em 2027?"]]}
   };
-  var sheet=document.getElementById('sheet'),form=document.getElementById('f'),qs=document.getElementById('f-qs'),done=document.getElementById('f-done'),nm=document.getElementById('f-nome'),cur=null,lastBtn=null;
+  // Uma pergunta por tela. Passo 0 = nome; passos 1..N = perguntas; "Enviar respostas" só aparece na última.
+  var sheet=document.getElementById('sheet'),body=document.getElementById('f-body'),cur=null,lastBtn=null,st=null;
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function chave(){return 'nexum-rascunho-'+cur}
+  function chave(){return 'nexum-rascunho-v2-'+cur}
   function lerRascunho(){try{return JSON.parse(localStorage.getItem(chave())||'null')}catch(_){return null}}
-  function guardar(){try{var f=forms[cur];var r={nome:nm.value,q:f.q.map(function(_,i){return document.getElementById('q'+i).value})};localStorage.setItem(chave(),JSON.stringify(r))}catch(_){}}
+  function guardar(){try{localStorage.setItem(chave(),JSON.stringify(st))}catch(_){}}
   function limpar(){try{localStorage.removeItem(chave())}catch(_){}}
-  function montar(){
-    var f=forms[cur],r=lerRascunho();
-    form.hidden=false;done.hidden=true;
-    ['e-nome','e-vazio','e-envio'].forEach(function(id){document.getElementById(id).hidden=true});
-    nm.removeAttribute('aria-invalid');nm.value=(r&&r.nome)||f.nome||'';
-    qs.innerHTML=f.q.map(function(q,i){return '<div class="field"><label for="q'+i+'"><span class="n">'+(i+1)+'</span>'+esc(q[0])+'</label>'+(q[1]?'<span class="help">'+esc(q[1])+'</span>':'')+'<textarea id="q'+i+'" name="q'+i+'" maxlength="3000"></textarea></div>'}).join('');
-    if(r&&r.q)r.q.forEach(function(v,i){var t=document.getElementById('q'+i);if(t)t.value=v||''});
+  function total(){return forms[cur].q.length}
+  function progresso(fim){
+    var n=total(),pct=fim?1:st.i/(n+1);
+    document.getElementById('f-barra').style.transform='scaleX('+pct+')';
+    document.getElementById('f-cont').textContent=fim?'':(st.i===0?'Antes de começar':'Pergunta '+st.i+' de '+n);
+  }
+  var SETA='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  function tela(){
+    var f=forms[cur],n=total(),i=st.i,ultima=i===n,html;
+    if(i===0){
+      html='<span class="eyebrow">'+esc(f.t)+'</span><h2 class="qt">Antes de começar, qual é o seu nome?</h2>'+
+        '<p class="help">São '+n+' perguntas, uma por vez. Escreva do seu jeito, como falaria.</p>'+
+        '<input id="campo" type="text" autocomplete="name" maxlength="120" value="'+esc(st.nome)+'">';
+    }else{
+      var q=f.q[i-1];
+      html='<span class="eyebrow">Pergunta '+i+' de '+n+'</span><h2 class="qt">'+esc(q[0])+'</h2>'+
+        (q[1]?'<p class="help">'+esc(q[1])+'</p>':'')+
+        '<textarea id="campo" maxlength="3000" placeholder="Escreva aqui">'+esc(st.r[i-1]||'')+'</textarea>';
+    }
+    body.innerHTML='<section class="passo">'+html+'<p class="err" id="erro" role="alert"></p>'+
+      '<div class="f-nav"><button class="voltar" type="button" id="volta">'+(i===0?'Fechar':'← Voltar')+'</button>'+
+      '<button class="btn pri" type="button" id="seg">Continuar '+SETA+'</button></div>'+
+      (i>0?'<p class="small">Cada resposta fica registrada ao tocar em Continuar. Se não souber alguma, deixe em branco e siga.</p>':'')+'</section>';
+    progresso(false);
+    var c=document.getElementById('campo');
+    setTimeout(function(){c.focus()},60);
+    c.addEventListener('input',function(){if(i===0)st.nome=c.value;else st.r[i-1]=c.value;guardar()});
+    if(i===0)c.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();avancar()}});
+    document.getElementById('seg').addEventListener('click',avancar);
+    document.getElementById('volta').addEventListener('click',function(){if(st.i===0)return fechar();st.i--;guardar();tela()});
+    sheet.scrollTop=0;
+  }
+  // Sem botão de enviar: cada resposta é gravada no Supabase ao tocar em Continuar.
+  // Cada gravação é uma linha com {s: sessão, n: número, p: pergunta, r: resposta}; o painel junta por sessão.
+  function sessao(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)}
+  function proximo(){
+    if(st.i<total()){st.i++;guardar();tela()}
+    else{var nome=String(st.nome).trim().split(' ')[0];limpar();final(nome)}
+  }
+  function avancar(){
+    var erro=document.getElementById('erro'),btn=document.getElementById('seg');
+    if(st.i===0){
+      if(!String(st.nome||'').trim()){erro.textContent='Escreva seu nome para sabermos de quem é a resposta.';return}
+      return proximo();
+    }
+    var k=st.i-1,v=String(st.r[k]||'').trim();
+    if(!v||v===st.env[k])return proximo();
+    if(!sb){erro.textContent='Sem conexão agora. Confira a internet e toque em Continuar de novo.';return}
+    btn.disabled=true;btn.textContent='Salvando';
+    sb.from(TABELA).insert({setor:cur,nome:String(st.nome).trim(),respostas:[{s:st.s,n:k+1,p:forms[cur].q[k][0],r:v}]}).then(function(res){
+      btn.disabled=false;
+      if(res.error){btn.innerHTML='Continuar '+SETA;erro.textContent='Não foi possível salvar agora. Confira a internet e toque em Continuar de novo.';return}
+      st.env[k]=v;guardar();proximo();
+    },function(){btn.disabled=false;btn.innerHTML='Continuar '+SETA;erro.textContent='Não foi possível salvar agora. Confira a internet e toque em Continuar de novo.'});
+  }
+  function final(nome){
+    progresso(true);
+    body.innerHTML='<section class="done passo"><div class="selo" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+      '<span class="eyebrow">Respostas recebidas</span><h2>Obrigado'+(nome?', '+esc(nome):'')+'</h2>'+
+      '<p class="lead">As respostas já chegaram para o Elton. Se outra pessoa do mesmo setor quiser responder, pode usar esta mesma página.</p>'+
+      '<div class="actions"><button class="btn ghost" type="button" id="f-outra">Enviar outra resposta</button><button class="btn pri" type="button" id="f-fim">Voltar para a página</button></div></section>';
+    document.getElementById('f-outra').addEventListener('click',function(){st={i:0,nome:'',r:[],env:[],s:sessao()};tela()});
+    document.getElementById('f-fim').addEventListener('click',fechar);
+    document.getElementById('f-fim').focus();
   }
   function abrir(k,btn){
     cur=k;lastBtn=btn;var f=forms[k];
     document.getElementById('f-title').textContent=f.t;
-    document.getElementById('f-eye').textContent=f.q.length+' perguntas';
-    montar();
+    st=lerRascunho()||{i:0,nome:f.nome||'',r:[],env:[],s:sessao()};
+    if(st.i>total())st.i=total();
     sheet.hidden=false;sheet.classList.add('enter');requestAnimationFrame(function(){requestAnimationFrame(function(){sheet.classList.remove('enter')})});
     document.body.style.overflow='hidden';
-    setTimeout(function(){(nm.value?document.getElementById('q0'):nm).focus()},60);
+    tela();
   }
   function fechar(){sheet.hidden=true;document.body.style.overflow='';if(lastBtn)lastBtn.focus()}
   [].forEach.call(document.querySelectorAll('.sector'),function(b){b.addEventListener('click',function(){abrir(b.getAttribute('data-form'),b)})});
   document.getElementById('f-close').addEventListener('click',fechar);
-  document.getElementById('f-fim').addEventListener('click',fechar);
-  document.getElementById('f-outra').addEventListener('click',function(){montar();nm.value=forms[cur].nome||'';nm.focus()});
-  sheet.addEventListener('click',function(e){if(e.target===sheet)fechar()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)fechar()});
-  form.addEventListener('input',guardar);
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var f=forms[cur],nome=nm.value.trim(),any=false;
-    nm.setAttribute('aria-invalid',nome?'false':'true');document.getElementById('e-nome').hidden=!!nome;
-    var respostas=f.q.map(function(q,i){var v=document.getElementById('q'+i).value.trim();if(v)any=true;return{p:q[0],r:v}});
-    document.getElementById('e-vazio').hidden=any;
-    document.getElementById('e-envio').hidden=true;
-    if(!nome){nm.focus();return}
-    if(!any){document.getElementById('q0').focus();return}
-    if(!sb){document.getElementById('e-envio').hidden=false;return}
-    var btn=document.getElementById('f-enviar');btn.disabled=true;btn.textContent='Enviando';
-    sb.from(TABELA).insert({setor:cur,nome:nome,respostas:respostas}).then(function(res){
-      btn.disabled=false;btn.textContent='Enviar respostas';
-      if(res.error){document.getElementById('e-envio').hidden=false;return}
-      limpar();form.hidden=true;done.hidden=false;document.getElementById('f-outra').focus();
-    },function(){btn.disabled=false;btn.textContent='Enviar respostas';document.getElementById('e-envio').hidden=false});
-  });
 
   // ===== BLOCO 11: ANIMAÇÕES =====
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;

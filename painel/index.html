@@ -81,9 +81,27 @@ async function carregar(){
   document.getElementById("sair").hidden = false;
   const { data:rows, error } = await sb.from("nexum_respostas").select("*").order("criado_em", { ascending:false });
   if(error) return app.innerHTML = `<p class="err">Erro ao carregar: ${esc(error.message)}. Já rodou o SQL da página sql.html?</p>`;
-  linhas = rows || [];
+  linhas = agrupar(rows || []);
   const s = location.hash.slice(1);
   SETORES.some(x => x[0] === s) ? telaSetor(s) : telaPastas();
+}
+
+// ===== BLOCO 4B: JUNTAR POR PESSOA =====
+// O formulário grava uma linha por resposta ({s: sessão, n: número, p, r}). Aqui vira um cartão por pessoa,
+// valendo a versão mais recente de cada pergunta. Linhas antigas (sem sessão) ficam como estão.
+function agrupar(rows){
+  const grupos = new Map(), soltas = [];
+  rows.forEach(l => {   // rows já vêm do mais novo para o mais antigo
+    const x = (l.respostas || [])[0];
+    if(!x || !x.s){ soltas.push(l); return; }
+    const k = l.setor + "|" + x.s;
+    if(!grupos.has(k)) grupos.set(k, { setor:l.setor, nome:l.nome, criado_em:l.criado_em, porN:{} });
+    const g = grupos.get(k);
+    if(!g.porN[x.n]) g.porN[x.n] = { p:x.p, r:x.r };
+  });
+  const juntos = [...grupos.values()].map(g => ({ setor:g.setor, nome:g.nome, criado_em:g.criado_em,
+    respostas: Object.keys(g.porN).map(Number).sort((a,b) => a-b).map(n => ({ n, ...g.porN[n] })) }));
+  return juntos.concat(soltas).sort((a,b) => new Date(b.criado_em) - new Date(a.criado_em));
 }
 
 // ===== BLOCO 5: PASTAS POR SETOR =====
@@ -106,7 +124,7 @@ function telaSetor(k){
     <button class="btn ghost voltar" id="volta">Voltar para as pastas</button>
     <h1>${esc(nome)}</h1>
     ${rs.length ? rs.map(r => `<div class="cartao"><div><h2>${esc(r.nome)}</h2><span class="muted">${data(r.criado_em)}</span></div>
-      ${(r.respostas || []).map((x, i) => `<div class="qa"><b>${i + 1}. ${esc(x.p)}</b><p class="${x.r ? "" : "vazio"}">${x.r ? esc(x.r) : "Sem resposta"}</p></div>`).join("")}</div>`).join("")
+      ${(r.respostas || []).map((x, i) => `<div class="qa"><b>${x.n || i + 1}. ${esc(x.p)}</b><p class="${x.r ? "" : "vazio"}">${x.r ? esc(x.r) : "Sem resposta"}</p></div>`).join("")}</div>`).join("")
       : `<p class="muted">Nenhuma resposta deste setor ainda. Quando alguém responder, aparece aqui.</p>`}</div>`;
   document.getElementById("volta").onclick = telaPastas;
 }
