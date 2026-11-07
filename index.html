@@ -87,6 +87,9 @@ main,footer,.top{position:relative}
 .hero .pill::before{content:"";width:8px;height:8px;border-radius:9999px;background:var(--ok)}
 .hero h1{font-size:4.5rem;line-height:1;letter-spacing:-.03em;max-width:760px;color:#FFFFFF}
 .hero h1 span{color:var(--sky)}
+.ganhos{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.ganhos li{font-family:var(--mono);font-size:1.125rem;line-height:1.75rem;font-weight:500;color:var(--fg);border:1px solid var(--glass-line);background:var(--glass);border-radius:9999px;padding:4px 16px}
+.ganhos b{color:var(--sky);font-weight:600}
 .hero .sub{max-width:680px;font-size:1.25rem;line-height:1.75rem;color:var(--muted)}
 .tagline p{font-size:3rem;line-height:1;font-weight:700;max-width:820px;letter-spacing:-.01em}
 .tagline .w{opacity:.3;transition:opacity .5s var(--ease)}
@@ -239,8 +242,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   <div class="aneis" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="stack-lg">
     <span class="eyebrow pill">Sistema Inteligente Nexum</span>
-    <h1>O novo sistema da <span>Nexum</span><br>começa pelas suas respostas</h1>
-    <p class="sub">Analisamos o sistema que a clínica usa hoje. Abaixo, o que encontramos, como vai ficar e as perguntas de cada setor para criarmos o protótipo.</p>
+    <h1>Um sistema com<br><span>inteligência artificial</span><br>embarcada</h1>
+    <ul class="ganhos" aria-label="O que muda">
+      <li><b>+</b> rápido</li>
+      <li><b>+</b> moderno</li>
+      <li><b>+</b> eficiente</li>
+    </ul>
+    <p class="sub">Feito sob medida para a Nexum: cada animal com a própria conta, o caixa fechando certo e uma assistente que responde na hora. Veja o que encontramos e como vai ficar.</p>
     <div><a class="btn pri" href="#hoje">Ver o que encontramos</a></div>
   </div>
 </header>
