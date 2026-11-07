@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL das respostas da Nexum</title>
+<style>
+  /* ===== BLOCO 1: ESTILO ===== */
+  body{margin:0;font-family:system-ui,sans-serif;background:#F3F6FB;color:#0E2138;padding:1.2rem;line-height:1.5}
+  h1{font-size:1.3rem;margin:0 0 .4rem} ol{padding-left:1.2rem;font-size:.95rem} li{margin:.3rem 0}
+  pre{background:#fff;border:1px solid #D8E1EE;border-radius:10px;padding:.9rem;font-size:.75rem;overflow-x:auto;white-space:pre}
+  button{width:100%;border:none;border-radius:8px;background:#2F6FB3;color:#fff;font-weight:700;font-size:1rem;padding:.9rem;margin:.6rem 0}
+  .ok{color:#1F7A4A;font-weight:700;text-align:center;min-height:1.4rem}
+</style>
+</head>
+<body>
+<h1>SQL das respostas da Nexum</h1>
+<ol>
+  <li>Abre o Supabase → projeto <b>realeza-holistica</b> (o mesmo do painel do diagnóstico).</li>
+  <li>SQL Editor → New query.</li>
+  <li>Toca em <b>Copiar SQL</b>, cola lá e clica em <b>Run</b>.</li>
+  <li>Tem que aparecer "Success. No rows returned". Pode rodar de novo sem problema.</li>
+</ol>
+<button id="b">Copiar SQL</button>
+<p class="ok" id="ok"></p>
+<pre id="sql">-- ===== Respostas dos formulários da Nexum (empresa de programação Elton Longaray) =====
+create table if not exists public.nexum_respostas (
+  id bigint generated always as identity primary key,
+  setor text not null check (setor in ('delce','recepcao','medicos','contador')),
+  nome text not null check (char_length(nome) between 1 and 120),
+  respostas jsonb not null check (pg_column_size(respostas) &lt; 40000),
+  criado_em timestamptz not null default now()
+);
+
+alter table public.nexum_respostas enable row level security;
+
+-- Qualquer pessoa com o link pode ENVIAR uma resposta (não consegue ler nem apagar)
+drop policy if exists "nexum envia" on public.nexum_respostas;
+create policy "nexum envia" on public.nexum_respostas
+  for insert to anon, authenticated with check (true);
+
+-- Só o Elton lê, edita e apaga (mesmo login do painel)
+drop policy if exists "nexum admin" on public.nexum_respostas;
+create policy "nexum admin" on public.nexum_respostas
+  for all to authenticated
+  using (auth.jwt()->>'email' = 'elton.longaray483@gmail.com')
+  with check (auth.jwt()->>'email' = 'elton.longaray483@gmail.com');
+
+grant insert on public.nexum_respostas to anon, authenticated;
+grant select, update, delete on public.nexum_respostas to authenticated;
+</pre>
+<script>
+  // ===== BLOCO 2: COPIAR =====
+  document.getElementById("b").onclick = async () => {
+    const t = document.getElementById("sql").textContent;
+    try{ await navigator.clipboard.writeText(t); }
+    catch(e){ const a=document.createElement("textarea"); a.value=t; document.body.appendChild(a); a.select(); document.execCommand("copy"); a.remove(); }
+    document.getElementById("ok").textContent = "Copiado. Agora cola no SQL Editor.";
+  };
+</script>
+</body>
+</html>
