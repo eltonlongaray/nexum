@@ -118,17 +118,23 @@ p{margin:0}
 
 /* ===== BLOCO 6: ASSISTENTE COM IA ===== */
 .ia{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:48px;align-items:start}
-.phone{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:12px}
-.phone .ph{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.avatar{width:40px;height:40px;border-radius:9999px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:.875rem}
-.phone .ph b{display:block;font-size:.875rem;line-height:1.25rem}
-.phone .ph span{font-size:.75rem;line-height:1rem;color:var(--muted)}
-.msgs{display:flex;flex-direction:column;gap:12px}
-.msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:.875rem;line-height:1.25rem}
-.msg.me{align-self:flex-end;background:var(--accent-soft)}
-.msg.ai{align-self:flex-start;background:var(--sunk)}
-.msg .hint{display:block;margin-top:4px;font-size:.75rem;line-height:1rem;color:var(--muted)}
-.photo{height:80px;border-radius:8px;background:repeating-linear-gradient(45deg,var(--line) 0 8px,transparent 8px 16px);display:grid;place-items:center;font-size:.75rem;line-height:1rem;color:var(--muted);margin-bottom:8px}
+/* Celular com a conversa ao vivo (mesmo ritmo da página da Altas Vendas: uma mensagem a cada 0,9 s, em loop) */
+.phone{background:#0B1A2C;border:1px solid rgba(255,255,255,.09);border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:380px;width:100%;margin:0 auto;box-shadow:0 32px 80px rgba(8,20,32,.35)}
+.phone .ph{display:flex;align-items:center;gap:12px;padding:4px 4px 12px;border-bottom:1px solid rgba(255,255,255,.09)}
+.avatar{width:36px;height:36px;border-radius:9999px;background:#2F6FB3;color:#FFFFFF;display:grid;place-items:center;font-weight:700;font-size:.75rem}
+.phone .ph b{display:block;font-size:.875rem;line-height:1.25rem;color:#FFFFFF}
+.phone .ph span{font-size:.75rem;line-height:1rem;color:#7F93AD}
+.phone .ph .vivo{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:.75rem;line-height:1rem;color:#7FD6A4}
+.phone .ph .vivo::before{content:"";width:8px;height:8px;border-radius:9999px;background:#7FD6A4}
+.msgs{display:flex;flex-direction:column;gap:8px;padding:4px;min-height:340px}
+.msg{max-width:84%;padding:8px 12px;border-radius:16px;font-size:.875rem;line-height:1.25rem;color:#E6EEF8;opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.msg.on{opacity:1;transform:none}
+.msg.me{align-self:flex-end;background:#2F6FB3;color:#FFFFFF;border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:#17293F;border-bottom-left-radius:4px}
+.msg .hint{display:block;margin-top:4px;font-size:.75rem;line-height:1rem;color:#9FB6D2}
+.msg.tag-ok{align-self:center;background:rgba(127,214,164,.1);color:#7FD6A4;border:1px solid rgba(127,214,164,.35);font-weight:700;font-size:.75rem;line-height:1rem;border-radius:9999px}
+.photo{height:72px;border-radius:12px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.14) 0 8px,transparent 8px 16px);display:grid;place-items:center;font-size:.75rem;line-height:1rem;color:#DDE8F5;margin-bottom:8px}
+@media (prefers-reduced-motion:reduce){.msg{opacity:1;transform:none;transition:none}}
 .ia-modes{display:flex;gap:8px;flex-wrap:wrap}
 .facts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
 .facts li{display:flex;gap:12px}
@@ -249,7 +255,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       </ul>
     </div>
     <div class="phone" id="chat" aria-label="Exemplo de conversa com a assistente">
-      <div class="ph"><div class="avatar" aria-hidden="true">IA</div><div><b>Assistente Nexum</b><span>exemplo com dados fictícios</span></div></div>
+      <div class="ph"><div class="avatar" aria-hidden="true">IA</div><div><b>Assistente Nexum</b><span>exemplo com dados fictícios</span></div><span class="vivo">online</span></div>
       <div class="msgs" id="msgs"></div>
     </div>
   </div>
@@ -337,7 +343,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       var a=areas[i];
       document.getElementById('l-hoje').innerHTML=a.h.map(function(x){return '<li>'+X+'<span>'+x[0]+(x[1]?'<br><span class="doubt">'+D+'</span>':'')+'</span></li>'}).join('');
       document.getElementById('l-novo').innerHTML=a.v.map(function(x){return '<li>'+OK+'<span>'+x+'</span></li>'}).join('');
-    }else liberar();
+    }else{liberar();if(msgs)tocar()}
     prev.hidden=i===0;
     next.innerHTML=ehIA?'Ir às perguntas ↓':'Próxima: '+nomeDe(i+1)+' →';
     [].forEach.call(dots.children,function(d,j){d.className=j===i?'on':''});
@@ -359,14 +365,30 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 
   // ===== BLOCO 9: EXEMPLOS DA ASSISTENTE =====
   var modes={
-    consulta:[["me","Quanto entrou hoje no caixa?"],["ai","R$ 3.418,70: R$ 1.902,40 no Pix, R$ 1.126,30 no cartão e R$ 390,00 em dinheiro."],["me","Quais vacinas vencem esta semana?"],["ai","Sete animais. Os primeiros: Thor na quarta, Luna na quinta e Mel na sexta."]],
-    foto:[["me","[foto] Lesão na pele do Thor, no flanco."],["ai","A foto está escura. Pode mandar outra mais perto, com luz natural?"],["me","[foto] Mais perto, com luz."],["ai","Hipóteses mais prováveis: dermatite alérgica, piodermite superficial e dermatofitose. Sem urgência. Para investigar: raspado de pele e citologia.","Apoio ao veterinário, que decide."]]
+    consulta:[["me","Quanto entrou hoje no caixa?"],["ai","R$ 3.418,70: R$ 1.902,40 no Pix, R$ 1.126,30 no cartão e R$ 390,00 em dinheiro."],["me","Quais vacinas vencem esta semana?"],["ai","Sete animais. Os primeiros: Thor na quarta, Luna na quinta e Mel na sexta."],["tag-ok","Lembretes prontos para enviar aos tutores"]],
+    foto:[["me","[foto] Lesão na pele do Thor, no flanco."],["ai","A foto está escura. Pode mandar outra mais perto, com luz natural?"],["me","[foto] Mais perto, com luz."],["ai","Hipóteses mais prováveis: dermatite alérgica, piodermite superficial e dermatofitose. Sem urgência. Para investigar: raspado de pele e citologia."],["tag-ok","Apoio ao veterinário, que decide"]]
   };
-  var msgs=document.getElementById('msgs');
+  var msgs=document.getElementById('msgs'),relogio=null,modoAtual='consulta';
+  var semMov=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Mesmo ritmo da Altas Vendas: começa em 0,5 s, uma mensagem a cada 0,9 s, espera 4,2 s e recomeça em 0,7 s
+  function tocar(){
+    clearTimeout(relogio);
+    var ms=[].slice.call(msgs.children);
+    if(semMov){ms.forEach(function(m){m.classList.add('on')});return}
+    var i=0;
+    function passo(){
+      if(iaBox.hidden)return;   // só roda com a etapa da IA na tela
+      if(i<ms.length){ms[i++].classList.add('on');relogio=setTimeout(passo,900)}
+      else relogio=setTimeout(function(){ms.forEach(function(m){m.classList.remove('on')});i=0;relogio=setTimeout(passo,700)},4200);
+    }
+    relogio=setTimeout(passo,500);
+  }
   function mode(k){
+    modoAtual=k;
     msgs.innerHTML=modes[k].map(function(x){var foto=x[1].indexOf('[foto]')===0;return '<div class="msg '+x[0]+'">'+(foto?'<div class="photo">foto enviada</div>'+x[1].replace('[foto] ',''):x[1])+(x[2]?'<span class="hint">'+x[2]+'</span>':'')+'</div>'}).join('');
     document.getElementById('m-consulta').setAttribute('aria-selected',k==='consulta');
     document.getElementById('m-foto').setAttribute('aria-selected',k==='foto');
+    tocar();
   }
   document.getElementById('m-consulta').addEventListener('click',function(){mode('consulta')});
   document.getElementById('m-foto').addEventListener('click',function(){mode('foto')});
