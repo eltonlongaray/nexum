@@ -11,6 +11,7 @@
   h1{font-size:1.3rem;margin:0 0 .4rem} ol{padding-left:1.2rem;font-size:.95rem} li{margin:.3rem 0}
   pre{background:#fff;border:1px solid #D8E1EE;border-radius:10px;padding:.9rem;font-size:.75rem;overflow-x:auto;white-space:pre}
   button{width:100%;border:none;border-radius:8px;background:#2F6FB3;color:#fff;font-weight:700;font-size:1rem;padding:.9rem;margin:.6rem 0}
+  .abrir{display:block;text-align:center;border:2px solid #2F6FB3;color:#2F6FB3;border-radius:8px;font-weight:700;font-size:1rem;padding:.8rem;text-decoration:none;margin:0 0 .6rem}
   .ok{color:#1F7A4A;font-weight:700;text-align:center;min-height:1.4rem}
 </style>
 </head>
@@ -23,6 +24,7 @@
   <li>Tem que aparecer "Success. No rows returned". Pode rodar de novo sem problema.</li>
 </ol>
 <button id="b">Copiar SQL</button>
+<a class="abrir" href="https://supabase.com/dashboard/project/gopqajnivmbxjqsiznqi/sql/new" target="_blank" rel="noopener">Abrir o SQL Editor do Supabase</a>
 <p class="ok" id="ok"></p>
 <pre id="sql">-- ===== Respostas dos formulários da Nexum (empresa de programação Elton Longaray) =====
 create table if not exists public.nexum_respostas (
